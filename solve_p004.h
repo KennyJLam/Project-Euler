@@ -21,7 +21,7 @@ namespace euler
         int current_;
         int half_;
         int num_digits_;
-        int used_digits_;
+        int half_digits_;
         int pow10(int exp);
     };
 }

@@ -14,12 +14,12 @@ using euler::PalindromeGenerator;
 PalindromeGenerator::PalindromeGenerator(int initial_value) : current_(initial_value)
 {
     num_digits_ = (int)floor(log10(current_)) + 1;
-    used_digits_ = num_digits_ / 2;
+    half_digits_ = num_digits_ / 2;
     if (num_digits_ % 2 != 0)
-        ++used_digits_;
+        ++half_digits_;
     int sum = 0;
     int working_value = initial_value;
-    for (int i = 0; i < used_digits_; ++i)
+    for (int i = 0; i < half_digits_; ++i)
     {
         sum *= 10;
         sum += working_value % 10;
@@ -34,29 +34,29 @@ int PalindromeGenerator::GetPrev()
     int sum = 0;
     if (num_digits_ % 2 == 0)
     {
-        for (int i = 0; i < used_digits_ ; ++i)
+        for (int i = 0; i < half_digits_; ++i)
         {
-            int digit = (half_ / pow10(used_digits_ - i - 1)) % 10;
+            int digit = (half_ / pow10(half_digits_ - i - 1)) % 10;
             sum += digit * (pow10(num_digits_ - i - 1) + pow10(i));
         }
     }
     else
     {
         int i;
-        for (i = 0; i < used_digits_ - 1 ; ++i)
+        for (i = 0; i < half_digits_ - 1 ; ++i)
         {
-            int digit = (half_ / pow10(used_digits_ - i - 1)) % 10;
+            int digit = (half_ / pow10(half_digits_ - i - 1)) % 10;
             sum += digit * (pow10(num_digits_ - i - 1) + pow10(i));
         }
-        int digit = (half_ / pow10(used_digits_ - i - 1)) % 10;
+        int digit = (half_ / pow10(half_digits_ - i - 1)) % 10;
         sum += digit * pow10(num_digits_ - i - 1);
     }
 
     current_ = sum;
     num_digits_ = (int)floor(log10(current_)) + 1;
-    used_digits_ = num_digits_ / 2;
+    half_digits_ = num_digits_ / 2;
     if (num_digits_ % 2 != 0)
-        ++used_digits_;
+        ++half_digits_;
     return current_;
 }
 

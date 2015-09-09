@@ -127,6 +127,19 @@ namespace euler
         }
         return gcf;
     }
+
+    template<typename T>
+    bool IsBinaryPalindrone(T target)
+    {
+        T reverse = 0;
+        T scratch = target;
+        while (scratch > 0)
+        {
+            reverse = (reverse << 1) + (scratch & 1);
+            scratch >>= 1;
+        }
+        return reverse == target;
+    }
 }
 
 #endif //PROJECT_EULER_MATH_UTIL_H

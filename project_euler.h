@@ -34,5 +34,6 @@
 #include "solve_p027.h"
 #include "solve_p028.h"
 #include "solve_p029.h"
+#include "solve_p030.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

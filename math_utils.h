@@ -83,6 +83,27 @@ namespace euler
         }
         return product;
     }
+
+    template<typename T>
+    T GetGcf(T a, T b)
+    {
+        if (a % b == 0)
+            return b;
+        if (b % a == 0)
+            return a;
+        T gcf = 1;
+        double sqrt_a = std::sqrt(a) + 1;
+        double sqrt_b = std::sqrt(b) + 1;
+        for (int i = 1; i < sqrt_a && i < sqrt_b; ++i)
+        {
+            if (a % i == 0 && b % i == 0)
+            {
+                if (i > gcf)
+                    gcf = i;
+            }
+        }
+        return gcf;
+    }
 }
 
 #endif //PROJECT_EULER_MATH_UTIL_H

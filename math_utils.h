@@ -25,6 +25,8 @@ namespace euler
     template<typename T>
     unsigned int num_digits_int(T target)
     {
+        if (target == 0)
+            return 1;
         unsigned int num_digits = 0;
         while (target != 0)
         {

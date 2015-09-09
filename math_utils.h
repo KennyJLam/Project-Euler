@@ -22,6 +22,27 @@ namespace euler
         return result;
     }
 
+    template<typename T>
+    unsigned int num_digits_int(T target)
+    {
+        unsigned int num_digits = 0;
+        while (target != 0)
+        {
+            ++num_digits;
+            target /= 10;
+        }
+        return num_digits;
+    }
+
+    template<typename T>
+    T rotate_int(T target, int num_digits)
+    {
+        if (target < 10 && num_digits == 1)
+            return target;
+        T mask = pow_int<T>(10, num_digits - 1);
+        return (target % mask) * 10 + target / mask;
+    }
+
     // This implementation is deprecated
 //    template<typename T>
 //    void GetDivisors(T target, std::set<T>& divisors)

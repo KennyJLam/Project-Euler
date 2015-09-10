@@ -4,7 +4,6 @@
 
 #include "solve_p038.h"
 #include <iostream>
-#include <set>
 #include "math_utils.h"
 
 typedef unsigned long long ull;

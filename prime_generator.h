@@ -16,9 +16,10 @@ namespace euler
     public:
         PrimeGenerator(T floor = 0);
         T NextPrime();
-        T NextPrime(T current_prime);
+        T NextPrime(T floor);
         bool IsPrime(T value);
         const std::set<T>& primes() const;
+        const T current_prime() const;
         ~PrimeGenerator();
     private:
         std::set<T> primes_;
@@ -42,6 +43,9 @@ namespace euler
     const std::set<T>& PrimeGenerator<T>::primes() const { return primes_; }
 
     template<typename T>
+    const T PrimeGenerator<T>::current_prime() const { return current_prime_; }
+
+    template<typename T>
     T PrimeGenerator<T>::NextPrime()
     {
         return NextPrime(current_prime_);
@@ -52,7 +56,7 @@ namespace euler
     T PrimeGenerator<T>::NextPrime(T floor)
     {
         if (floor >= max_prime_)
-            generate_new_primes(floor);;
+            generate_new_primes(floor);
         return current_prime_ = *(primes_.upper_bound(floor));
     }
 
@@ -68,7 +72,7 @@ namespace euler
     void PrimeGenerator<T>::generate_new_primes(T floor)
     {
         T i = max_prime_;
-        while (i < floor)
+        while (i <= floor)
         {
             i = generate_new_prime();
         }

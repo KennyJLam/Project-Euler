@@ -6,6 +6,7 @@
 #define PROJECT_EULER_MATH_UTIL_H
 
 #include "prime_utils.h"
+#include <unordered_set>
 
 namespace euler
 {
@@ -45,27 +46,6 @@ namespace euler
         return (target % mask) * 10 + target / mask;
     }
 
-    // This implementation is deprecated
-//    template<typename T>
-//    void GetDivisors(T target, std::set<T>& divisors)
-//    {
-//        std::vector<T> factors;
-//        GetPrimeFactors(target, factors);
-//
-//        for (int i = 0; i < pow_int<int>(2, factors.size()); ++i)
-//        {
-//            T divisor = 1;
-//            for (int j = 0; j < factors.size(); ++j)
-//            {
-//                if ((i & (1 << j)) != 0)
-//                    divisor *= factors[j];
-//            }
-//            if (divisors.find(divisor) == divisors.end())
-//                divisors.insert(divisor);
-//        }
-//    }
-
-    // This implementation is much faster than the one above
     template<typename T>
     void GetDivisors(T target, std::set<T>& divisors)
     {
@@ -139,6 +119,21 @@ namespace euler
             scratch >>= 1;
         }
         return reverse == target;
+    }
+
+    template<typename T>
+    bool IsPanDigital(T target, int n)
+    {
+        std::unordered_set<char> digits;
+        while (target > 0)
+        {
+            char digit = target % 10;
+            if (digit > n || digit == 0)
+                return false;
+            digits.insert(digit);
+            target /= 10;
+        }
+        return digits.size() == n;
     }
 }
 

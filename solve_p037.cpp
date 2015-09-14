@@ -4,7 +4,7 @@
 
 #include "solve_p037.h"
 #include <iostream>
-#include "prime_generator.h"
+#include "generators/prime_generator.h"
 #include "math_utils.h"
 
 typedef unsigned long long ull;

@@ -4,7 +4,7 @@
 
 #include "solve_p044.h"
 #include <iostream>
-#include "pentagonal_generator.h"
+#include "generators/pentagonal_generator.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

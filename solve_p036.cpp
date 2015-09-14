@@ -5,7 +5,7 @@
 #include "solve_p036.h"
 #include <iostream>
 #include "math_utils.h"
-#include "palindrone_generator.h"
+#include "generators/palindrone_generator.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

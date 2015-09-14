@@ -3,7 +3,7 @@
 //
 
 #include "solve_p027.h"
-#include "prime_generator.h"
+#include "generators/prime_generator.h"
 #include <iostream>
 
 typedef unsigned long long ull;

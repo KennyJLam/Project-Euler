@@ -6,7 +6,7 @@
 #define PROJECT_EULER_PALINDRONEGENERATOR_H
 
 #include <cmath>
-#include "math_utils.h"
+#include "../math_utils.h"
 
 namespace euler
 {

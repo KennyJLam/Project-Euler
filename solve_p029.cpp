@@ -3,7 +3,7 @@
 //
 
 #include "solve_p029.h"
-#include "prime_generator.h"
+#include "generators/prime_generator.h"
 #include "prime_utils.h"
 #include <iostream>
 #include <memory>

@@ -18,8 +18,9 @@ namespace euler
         T NextPrime();
         T NextPrime(T floor);
         bool IsPrime(T value);
+        std::set<T>& PrimeFactors(T value, std::set<T>& prime_factors);
         const std::set<T>& primes() const;
-        const T current_prime() const;
+        T current_prime() const;
         ~PrimeGenerator();
     private:
         std::set<T> primes_;
@@ -43,7 +44,7 @@ namespace euler
     const std::set<T>& PrimeGenerator<T>::primes() const { return primes_; }
 
     template<typename T>
-    const T PrimeGenerator<T>::current_prime() const { return current_prime_; }
+    T PrimeGenerator<T>::current_prime() const { return current_prime_; }
 
     template<typename T>
     T PrimeGenerator<T>::NextPrime()
@@ -66,6 +67,35 @@ namespace euler
         if (value > max_prime_)
             generate_new_primes(value);
         return primes_.find(value) != primes_.end();
+    }
+
+    template<typename T>
+    std::set<T>& PrimeGenerator<T>::PrimeFactors(T value, std::set<T>& prime_factors)
+    {
+        if (value > max_prime_)
+            generate_new_primes(value);
+        prime_factors.clear();
+
+        if (IsPrime(value))
+        {
+            prime_factors.insert(value);
+            return prime_factors;
+        }
+
+        while (value != 1)
+        {
+            for (T prime : primes_)
+            {
+                if (value % prime == 0)
+                {
+                    prime_factors.insert(prime);
+                    value /= prime;
+                    break;
+                }
+            }
+        }
+
+        return prime_factors;
     }
 
     template<typename T>

@@ -7,6 +7,7 @@
 
 #include "prime_utils.h"
 #include <unordered_set>
+#include <algorithm>
 
 namespace euler
 {
@@ -134,6 +135,34 @@ namespace euler
             target /= 10;
         }
         return digits.size() == n;
+    }
+
+    template<typename T>
+    bool AreDigitsEquals(T a, T b)
+    {
+        std::map<int,int> a_digits;
+        std::map<int,int> b_digits;
+
+        while (a > 0)
+        {
+            int digit = a % 10;
+            if (a_digits.find(digit) == a_digits.end())
+                a_digits[digit] = 0;
+            ++a_digits[digit];
+            a /= 10;
+        }
+
+        while (b > 0)
+        {
+            int digit = b % 10;
+            if (b_digits.find(digit) == b_digits.end())
+                b_digits[digit] = 0;
+            ++b_digits[digit];
+            b /= 10;
+        }
+
+        return a_digits.size() == b_digits.size() &&
+                std::equal(a_digits.begin(), a_digits.end(), b_digits.begin());
     }
 }
 

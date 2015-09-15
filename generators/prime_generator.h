@@ -15,6 +15,7 @@ namespace euler
     {
     public:
         PrimeGenerator(T floor = 0);
+        void SetFloor(T floor);
         T NextPrime();
         T NextPrime(T floor);
         bool IsPrime(T value);
@@ -59,6 +60,14 @@ namespace euler
         if (floor >= max_prime_)
             generate_new_primes(floor);
         return current_prime_ = *(primes_.upper_bound(floor));
+    }
+
+    template<typename T>
+    void PrimeGenerator<T>::SetFloor(T floor)
+    {
+        if (floor >= max_prime_)
+            generate_new_primes(floor);
+        current_prime_ = *(--primes_.upper_bound(floor));
     }
 
     template<typename T>

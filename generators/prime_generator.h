@@ -73,6 +73,8 @@ namespace euler
     template<typename T>
     bool PrimeGenerator<T>::IsPrime(T value)
     {
+        if (value < 2)
+            return false;
         if (value > max_prime_)
             generate_new_primes(value);
         return primes_.find(value) != primes_.end();

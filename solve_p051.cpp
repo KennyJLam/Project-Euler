@@ -67,7 +67,6 @@ void euler::SolveP051()
 {
     PrimeGenerator<ull> gen;
     const uint target_matches = 8;
-    string match;
     vector<char> pattern;
     pattern.push_back(1);
     pattern.push_back('*');
@@ -77,14 +76,20 @@ void euler::SolveP051()
     {
         bool exit_loop = false;
         uint num_matches = 0;
-        for (char digit = 0; digit <= 9; ++digit)
+        // Number wilds must be a multiple of 3.  Otherwise, at least one of the
+        // resulting 8 generated numbers will have digits that sum to a multiple of 3
+        if (num_wilds % 3 == 0)
         {
-            ull target = sub_wilds(pattern, digit);
-            if (gen.IsPrime(target))
-                ++num_matches;
-            if (num_matches == target_matches)
-                exit_loop = true;
+            for (char digit = 0; digit <= 9; ++digit)
+            {
+                ull target = sub_wilds(pattern, digit);
+                if (gen.IsPrime(target))
+                    ++num_matches;
+                if (num_matches == target_matches)
+                    exit_loop = true;
+            }
         }
+
         if (exit_loop)
             break;
         num_wilds = increment_pattern(pattern, num_wilds);

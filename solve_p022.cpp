@@ -14,7 +14,7 @@ using namespace std;
 
 void euler::SolveP022()
 {
-    ifstream input("C:/Dev/Project Euler/p022_names.txt");
+    ifstream input("C:/Dev/Project-Euler/p022_names.txt");
     string value;
     vector<string> names;
     while (input.good())

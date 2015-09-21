@@ -152,7 +152,7 @@ void euler::SolveP054()
     const uint hand_size = 5;
     vector<string> hands;
 
-    ifstream input("C:/Dev/Project-Euler/Inputs/p054_poker.txt");
+    ifstream input("C:/Dev/Project-Euler/inputs/p054_poker.txt");
     string value;
     while (input.good())
     {

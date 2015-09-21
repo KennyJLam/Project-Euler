@@ -14,7 +14,7 @@ using namespace std;
 
 void euler::SolveP042()
 {
-    ifstream input("C:/Dev/Project-Euler/Inputs/p042_words.txt");
+    ifstream input("C:/Dev/Project-Euler/inputs/p042_words.txt");
     string value;
     vector<string> words;
     uint max_len = 0;

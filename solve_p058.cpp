@@ -20,7 +20,6 @@ void euler::SolveP058()
     ull num_values = 1;
 
     uint n;
-    uint count = 0;
     for (n = 3;; n += 2)
     {
         num_values += 4;
@@ -31,14 +30,6 @@ void euler::SolveP058()
             ++num_primes;
         if (gen.IsPrime(square - 3 * (n - 1)))
             ++num_primes;
-
-        double ratio = ((double)num_primes) / num_values;
-        ++count;
-        if (count == 500)
-        {
-            cout << n << " " << ratio << endl;
-            count = 0;
-        }
 
         if (max_ratio * num_primes < num_values)
             break;

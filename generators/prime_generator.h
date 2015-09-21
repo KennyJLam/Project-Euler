@@ -70,14 +70,38 @@ namespace euler
         current_prime_ = *(--primes_.upper_bound(floor));
     }
 
+//    template<typename T>
+//    bool PrimeGenerator<T>::IsPrime(T value)
+//    {
+//        if (value < 2)
+//            return false;
+//        if (value > max_prime_)
+//            generate_new_primes(value);
+//        return primes_.find(value) != primes_.end();
+//    }
+
     template<typename T>
     bool PrimeGenerator<T>::IsPrime(T value)
     {
         if (value < 2)
             return false;
-        if (value > max_prime_)
-            generate_new_primes(value);
-        return primes_.find(value) != primes_.end();
+        if (primes_.find(value) != primes_.end())
+            return true;
+        T floor = std::floor(std::sqrt(value));
+        if (floor > max_prime_)
+            generate_new_primes(floor);
+        bool divisible = false;
+        for (T prime : primes_)
+        {
+            if (prime > floor)
+                break;
+            if (value % prime == 0)
+            {
+                divisible = true;
+                break;
+            }
+        }
+        return !divisible;
     }
 
     template<typename T>

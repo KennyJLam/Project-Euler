@@ -10,5 +10,4 @@ namespace euler
     void SolveP057();
 }
 
-
 #endif //PROJECT_EULER_SOLVE_P057_H

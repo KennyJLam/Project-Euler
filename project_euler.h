@@ -68,5 +68,6 @@
 #include "solve_p061.h"
 #include "solve_p062.h"
 #include "solve_p063.h"
+#include "solve_p064.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

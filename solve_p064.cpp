@@ -5,14 +5,13 @@
 #include "solve_p064.h"
 #include <iostream>
 #include "math_utils.h"
-#include <map>
-#include <tuple>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;
 
 using namespace std;
 
+// Apparently there's a faster way to compute this on wikipedia
 void euler::SolveP064()
 {
     const uint max = 10000;

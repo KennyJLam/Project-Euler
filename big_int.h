@@ -17,6 +17,7 @@ namespace euler
         BigInt();
         BigInt(unsigned long long value);
         BigInt(const std::string& digits);
+        BigInt(const BigInt<T>& big_int);
         void Add(T value);
         void Add(const BigInt<T>& value);
         void Multiply(T value);
@@ -40,12 +41,20 @@ namespace euler
     template<typename T>
     BigInt<T>::BigInt(unsigned long long value)
     {
-        while (value > 0)
+        if (value == 0)
+            digits_.push_back(0);
+        else
         {
-            digits_.push_back(value % 10);
-            value /= 10;
+            while (value > 0)
+            {
+                digits_.push_back(value % 10);
+                value /= 10;
+            }
         }
     }
+
+    template<typename T>
+    BigInt<T>::BigInt(const BigInt<T>& big_int) : digits_(big_int.digits_) { }
 
     template<typename T>
     BigInt<T>::BigInt(const std::string& value)

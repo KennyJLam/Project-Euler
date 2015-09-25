@@ -22,10 +22,13 @@ namespace euler
         void Add(const BigInt<T>& value);
         void Multiply(T value);
         void Multiply(const BigInt<T>&  value);
+        bool operator>(const BigInt<T>&  value);
         void operator+=(T value);
         void operator+=(const BigInt<T>& value);
         void operator*=(T value);
         void operator*=(const BigInt<T>& value);
+        bool operator==(const BigInt<T>& value);
+        bool operator!=(const BigInt<T>& value);
         void operator=(unsigned long long  value);
         void operator=(const BigInt<T>& value);
         unsigned int ToUint() const;
@@ -209,6 +212,42 @@ namespace euler
         }
         temp.ripple_carry();
         digits_ = temp.digits_;
+    }
+
+    template<typename T>
+    bool BigInt<T>::operator==(const BigInt<T>& value)
+    {
+        if (NumDigits() != value.NumDigits())
+            return false;
+        for (unsigned int i = 0; i < NumDigits(); ++i)
+        {
+            if (digits_[i] != value.digits_[i])
+                return false;
+        }
+        return true;
+    }
+
+    template<typename T>
+    bool BigInt<T>::operator!=(const BigInt<T>& value)
+    {
+        return !operator==(value);
+    }
+
+    template<typename T>
+    bool BigInt<T>::operator>(const BigInt<T>&  value)
+    {
+        if (digits_.size() > value.digits_.size())
+            return true;
+        if (digits_.size() < value.digits_.size())
+            return false;
+        for (int i = digits_.size() - 1; i >= 0; --i)
+        {
+            if (digits_[i] > value.digits_[i])
+                return true;
+            if (digits_[i] < value.digits_[i])
+                return false;
+        }
+        return false;
     }
 
     template<typename T>

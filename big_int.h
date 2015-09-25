@@ -21,9 +21,13 @@ namespace euler
         void Add(T value);
         void Add(const BigInt<T>& value);
         void Multiply(T value);
+        void Multiply(const BigInt<T>&  value);
         void operator+=(T value);
         void operator+=(const BigInt<T>& value);
         void operator*=(T value);
+        void operator*=(const BigInt<T>& value);
+        void operator=(unsigned long long  value);
+        void operator=(const BigInt<T>& value);
         unsigned int ToUint() const;
         unsigned long long int ToUll() const;
         std::string ToString() const;
@@ -41,6 +45,12 @@ namespace euler
     template<typename T>
     BigInt<T>::BigInt(unsigned long long value)
     {
+        operator=(value);
+    }
+
+    template<typename T>
+    void BigInt<T>::operator=(unsigned long long value)
+    {
         if (value == 0)
             digits_.push_back(0);
         else
@@ -51,6 +61,12 @@ namespace euler
                 value /= 10;
             }
         }
+    }
+
+    template<typename T>
+    void BigInt<T>::operator=(const BigInt<T>& value)
+    {
+        digits_ = value.digits_;
     }
 
     template<typename T>
@@ -79,6 +95,12 @@ namespace euler
 
     template<typename T>
     void BigInt<T>::operator*=(T value)
+    {
+        Multiply(value);
+    }
+
+    template<typename T>
+    void BigInt<T>::operator*=(const BigInt<T>& value)
     {
         Multiply(value);
     }
@@ -120,7 +142,7 @@ namespace euler
 
         for (auto iter = digits_.rbegin(); iter != digits_.rend(); ++iter)
         {
-            value.append(*iter + '0');
+            value.push_back((char)(*iter + '0'));
         }
 
         return value;
@@ -141,10 +163,7 @@ namespace euler
     template<typename T>
     void BigInt<T>::Add(T value)
     {
-        for (unsigned int i = 0; i < digits_.size(); ++i)
-        {
-            digits_[i] += value;
-        }
+        digits_[0] += value;
 
         ripple_carry();
     }
@@ -172,6 +191,24 @@ namespace euler
         }
 
         ripple_carry();
+    }
+
+    template<typename T>
+    void BigInt<T>::Multiply(const BigInt<T>&  value)
+    {
+        BigInt<T> temp(0);
+        for (unsigned int i = 0; i < value.NumDigits(); ++i)
+        {
+            for (unsigned int j = 0; j < NumDigits(); ++j)
+            {
+                if (i + j < temp.NumDigits())
+                    temp.digits_[i + j] += value.digits_[i] * digits_[j];
+                else
+                    temp.digits_.push_back(value.digits_[i] * digits_[j]);
+            }
+        }
+        temp.ripple_carry();
+        digits_ = temp.digits_;
     }
 
     template<typename T>

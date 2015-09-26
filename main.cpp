@@ -8,7 +8,7 @@ using namespace std::chrono;
 int main()
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    euler::SolveP068();
+    euler::SolveP069();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
     long long int duration = duration_cast<milliseconds>(t2 - t1).count();

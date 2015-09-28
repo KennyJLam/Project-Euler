@@ -4,8 +4,6 @@
 
 #include "solve_p071.h"
 #include <iostream>
-#include <map>
-#include "generators/prime_generator.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;
@@ -17,7 +15,6 @@ void euler::SolveP071()
     const uint max_denom = 1000000;
     const uint target_num = 3;
     const uint target_denom = 7;
-    uint denom_floor = max_denom / target_denom * target_denom;
 
     ull best_num = 0, best_denom = 1;
 

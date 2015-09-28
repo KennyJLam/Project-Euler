@@ -70,16 +70,6 @@ namespace euler
         current_prime_ = *(--primes_.upper_bound(floor));
     }
 
-//    template<typename T>
-//    bool PrimeGenerator<T>::IsPrime(T value)
-//    {
-//        if (value < 2)
-//            return false;
-//        if (value > max_prime_)
-//            generate_new_primes(value);
-//        return primes_.find(value) != primes_.end();
-//    }
-
     template<typename T>
     bool PrimeGenerator<T>::IsPrime(T value)
     {
@@ -88,7 +78,7 @@ namespace euler
         if (primes_.find(value) != primes_.end())
             return true;
         T floor = std::floor(std::sqrt(value));
-        if (floor > max_prime_)
+        if (floor >= max_prime_)
             generate_new_primes(floor);
         bool divisible = false;
         for (T prime : primes_)
@@ -107,16 +97,18 @@ namespace euler
     template<typename T>
     std::set<T>& PrimeGenerator<T>::PrimeFactors(T value, std::set<T>& prime_factors)
     {
-        if (value > max_prime_)
-            generate_new_primes(value);
-        prime_factors.clear();
-
-        if (IsPrime(value))
+        if (primes_.find(value) != primes_.end())
         {
             prime_factors.insert(value);
             return prime_factors;
         }
 
+        T floor = std::floor(std::sqrt(value));
+        if (floor >= max_prime_)
+            generate_new_primes(floor);
+        prime_factors.clear();
+
+        bool remainder_is_prime = false;
         while (value != 1)
         {
             for (T prime : primes_)
@@ -125,9 +117,19 @@ namespace euler
                 {
                     prime_factors.insert(prime);
                     value /= prime;
+                    floor = std::floor(std::sqrt(value));
+                    break;
+                }
+
+                if (prime > floor)
+                {
+                    remainder_is_prime = true;
+                    prime_factors.insert(value);
                     break;
                 }
             }
+            if (remainder_is_prime)
+                break;
         }
 
         return prime_factors;

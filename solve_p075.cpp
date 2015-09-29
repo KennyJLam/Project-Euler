@@ -34,6 +34,7 @@ void euler::recurse_pythag(uint a, uint b, uint c, uint max_L, map<uint,uint>& c
     recurse_pythag(2 * b + 2 * c - a, b + 2 * c - 2 * a, 2 * b + 3 * c - 2 * a, max_L, counts);
 }
 
+// Key term: Primitive Pythagorean Triplet Tree
 void euler::SolveP075()
 {
     uint max_L = 1500000;
@@ -46,27 +47,6 @@ void euler::SolveP075()
         if (p.second == 1)
             ++count;
     }
-
-//    for (ull L = 12; L <= max_L; L += 2)
-//    {
-//        if (L % 10000 == 0)
-//            cout << L << endl;
-//        uint num_matches = 0;
-//        for (ull a = 1;;++a)
-//        {
-//            ull num_check = L * (L - 2 * a) / 2;
-//            if (a > (((double) num_check) / (L - a)))
-//                break;
-//            if (num_check % (L - a) == 0)
-//            {
-//                ++num_matches;
-//                if (num_matches > 1)
-//                    break;
-//            }
-//        }
-//        if (num_matches == 1)
-//            ++count;
-//    }
 
     ull solution = count;
     cout << "P075 solution: " << solution << endl;

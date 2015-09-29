@@ -81,5 +81,6 @@
 #include "solve_p074.h"
 #include "solve_p075.h"
 #include "solve_p076.h"
+#include "solve_p077.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

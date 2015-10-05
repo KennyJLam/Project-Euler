@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace euler
 {
@@ -18,35 +19,51 @@ namespace euler
         BigInt(unsigned long long value);
         BigInt(const std::string& digits);
         BigInt(const BigInt<T>& big_int);
-        void Add(T value);
-        void Add(const BigInt<T>& value);
-        void Multiply(T value);
-        void Multiply(const BigInt<T>&  value);
-        bool operator>(const BigInt<T>&  value);
-        void operator+=(T value);
-        void operator+=(const BigInt<T>& value);
-        void operator*=(T value);
-        void operator*=(const BigInt<T>& value);
-        bool operator==(const BigInt<T>& value);
-        bool operator!=(const BigInt<T>& value);
+        BigInt(BigInt<T>&& big_int);
+
         void operator=(unsigned long long  value);
         void operator=(const BigInt<T>& value);
+        void operator=(BigInt<T>&& value);
+
+        void Add(T value);
+        void Add(const BigInt<T>& value);
+        void operator+=(T value);
+        void operator+=(const BigInt<T>& value);
+        BigInt<T> operator+(const BigInt<T>& value);
+
+        void Subtract(const BigInt<T>& value);
+        void operator-=(const BigInt<T>& value);
+        BigInt<T> operator-(const BigInt<T>& value);
+
+        void Multiply(T value);
+        void Multiply(const BigInt<T>&  value);
+        void operator*=(T value);
+        void operator*=(const BigInt<T>& value);
+        BigInt<T> operator*(const BigInt<T>& value);
+
+        bool operator>(const BigInt<T>&  value);
+        bool operator==(const BigInt<T>& value);
+        bool operator!=(const BigInt<T>& value);
+
         unsigned int ToUint() const;
         unsigned long long int ToUll() const;
         std::string ToString() const;
+
         const std::vector<T>& digits() const;
         const typename std::vector<T>::size_type NumDigits() const;
+
         ~BigInt();
     private:
         std::vector<T> digits_;
         void ripple_carry();
+        bool is_negative_;
     };
 
     template<typename T>
-    BigInt<T>::BigInt() : digits_(1, 0) { }
+    BigInt<T>::BigInt() : digits_(1, 0), is_negative_(false) { }
 
     template<typename T>
-    BigInt<T>::BigInt(unsigned long long value)
+    BigInt<T>::BigInt(unsigned long long value) : is_negative_(false)
     {
         operator=(value);
     }
@@ -54,6 +71,7 @@ namespace euler
     template<typename T>
     void BigInt<T>::operator=(unsigned long long value)
     {
+        is_negative_ = false;
         if (value == 0)
             digits_.push_back(0);
         else
@@ -70,17 +88,30 @@ namespace euler
     void BigInt<T>::operator=(const BigInt<T>& value)
     {
         digits_ = value.digits_;
+        is_negative_ = value.is_negative_;
     }
 
     template<typename T>
-    BigInt<T>::BigInt(const BigInt<T>& big_int) : digits_(big_int.digits_) { }
+    void BigInt<T>::operator=(BigInt<T>&& value)
+    {
+        digits_ = std::move(value.digits_);
+        is_negative_ = value.is_negative_;
+    }
+
+    template<typename T>
+    BigInt<T>::BigInt(const BigInt<T>& big_int) : digits_(big_int.digits_), is_negative_(big_int.is_negative_) { }
+
+    template<typename T>
+    BigInt<T>::BigInt(BigInt<T>&& big_int) : digits_(std::move(big_int.digits_)), is_negative_(big_int.is_negative_) { }
 
     template<typename T>
     BigInt<T>::BigInt(const std::string& value)
     {
+        is_negative_ = value.front() == '-';
         for (auto iter = value.rbegin(); iter != value.rend(); ++iter)
         {
-            digits_.push_back(*iter - '0');
+            if (*iter != '-')
+                digits_.push_back(*iter - '0');
         }
     }
 
@@ -97,6 +128,28 @@ namespace euler
     }
 
     template<typename T>
+    void BigInt<T>::operator-=(const BigInt<T>& value)
+    {
+        Subtract(value);
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator-(const BigInt<T>& value)
+    {
+        BigInt<T> temp(*this);
+        temp.Subtract(value);
+        return temp;
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator+(const BigInt<T>& value)
+    {
+        BigInt<T> temp(*this);
+        temp.Add(value);
+        return temp;
+    }
+
+    template<typename T>
     void BigInt<T>::operator*=(T value)
     {
         Multiply(value);
@@ -106,6 +159,14 @@ namespace euler
     void BigInt<T>::operator*=(const BigInt<T>& value)
     {
         Multiply(value);
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator*(const BigInt<T>& value)
+    {
+        BigInt<T> temp(*this);
+        temp.Multiply(value);
+        return temp;
     }
 
     template<typename T>
@@ -142,7 +203,8 @@ namespace euler
     std::string BigInt<T>::ToString() const
     {
         std::string value;
-
+        if (is_negative_)
+            value.push_back('-');
         for (auto iter = digits_.rbegin(); iter != digits_.rend(); ++iter)
         {
             value.push_back((char)(*iter + '0'));
@@ -185,9 +247,23 @@ namespace euler
         ripple_carry();
     }
 
+    // TODO: Right now we assume a positive difference
+    template<typename T>
+    void BigInt<T>::Subtract(const BigInt<T>& value)
+    {
+        for (unsigned int i = 0; i < value.digits_.size(); ++i)
+        {
+            if (i < digits_.size())
+                digits_[i] -= value.digits_[i];
+        }
+
+        ripple_carry();
+    }
+
     template<typename T>
     void BigInt<T>::Multiply(T value)
     {
+        is_negative_ = value > 0 == is_negative_;
         for (unsigned int i = 0; i < digits_.size(); ++i)
         {
             digits_[i] *= value;
@@ -199,6 +275,7 @@ namespace euler
     template<typename T>
     void BigInt<T>::Multiply(const BigInt<T>&  value)
     {
+        is_negative_ = !value.is_negative_ == is_negative_;
         BigInt<T> temp(0);
         for (unsigned int i = 0; i < value.NumDigits(); ++i)
         {
@@ -217,7 +294,7 @@ namespace euler
     template<typename T>
     bool BigInt<T>::operator==(const BigInt<T>& value)
     {
-        if (NumDigits() != value.NumDigits())
+        if (NumDigits() != value.NumDigits() || is_negative_ != value.is_negative_)
             return false;
         for (unsigned int i = 0; i < NumDigits(); ++i)
         {
@@ -236,9 +313,9 @@ namespace euler
     template<typename T>
     bool BigInt<T>::operator>(const BigInt<T>&  value)
     {
-        if (digits_.size() > value.digits_.size())
+        if (digits_.size() > value.digits_.size() || (!is_negative_ && value.is_negative_))
             return true;
-        if (digits_.size() < value.digits_.size())
+        if (digits_.size() < value.digits_.size() || (is_negative_ && !value.is_negative_))
             return false;
         for (int i = digits_.size() - 1; i >= 0; --i)
         {
@@ -255,7 +332,12 @@ namespace euler
     {
         for (unsigned int i = 0; i < digits_.size(); ++i)
         {
-            if (digits_[i] >= 10)
+            if (digits_[i] < 0)
+            {
+                digits_[i] += 10;
+                digits_[i + 1] -= 1;
+            }
+            else if (digits_[i] >= 10)
             {
                 T temp = digits_[i] / 10;
                 digits_[i] %= 10;
@@ -270,6 +352,10 @@ namespace euler
                     temp /= 10;
                 }
             }
+        }
+        while (digits_.back() == 0)
+        {
+            digits_.pop_back();
         }
     }
 

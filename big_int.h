@@ -42,6 +42,8 @@ namespace euler
         BigInt<T> operator*(const BigInt<T>& value);
 
         bool operator>(const BigInt<T>&  value);
+        bool operator<(const BigInt<T>&  value);
+        bool operator<=(const BigInt<T>&  value);
         bool operator==(const BigInt<T>& value);
         bool operator!=(const BigInt<T>& value);
 
@@ -263,6 +265,13 @@ namespace euler
     template<typename T>
     void BigInt<T>::Multiply(T value)
     {
+        if (value == 0 || (digits_.size() == 1 && digits_[0] == 0))
+        {
+            digits_.clear();
+            digits_.push_back(0);
+            is_negative_ = false;
+            return;
+        }
         is_negative_ = value > 0 == is_negative_;
         for (unsigned int i = 0; i < digits_.size(); ++i)
         {
@@ -328,6 +337,29 @@ namespace euler
     }
 
     template<typename T>
+    bool BigInt<T>::operator<(const BigInt<T>&  value)
+    {
+        if (digits_.size() > value.digits_.size() || (!is_negative_ && value.is_negative_))
+            return false;
+        if (digits_.size() < value.digits_.size() || (is_negative_ && !value.is_negative_))
+            return true;
+        for (int i = digits_.size() - 1; i >= 0; --i)
+        {
+            if (digits_[i] > value.digits_[i])
+                return false;
+            if (digits_[i] < value.digits_[i])
+                return true;
+        }
+        return false;
+    }
+
+    template<typename T>
+    bool BigInt<T>::operator<=(const BigInt<T>&  value)
+    {
+        return !operator>(value);
+    }
+
+    template<typename T>
     void BigInt<T>::ripple_carry()
     {
         for (unsigned int i = 0; i < digits_.size(); ++i)
@@ -353,7 +385,7 @@ namespace euler
                 }
             }
         }
-        while (digits_.back() == 0)
+        while (digits_.back() == 0 && digits_.size() > 1)
         {
             digits_.pop_back();
         }

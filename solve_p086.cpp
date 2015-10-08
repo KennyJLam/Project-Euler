@@ -4,7 +4,6 @@
 
 #include "solve_p086.h"
 #include <iostream>
-#include <map>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

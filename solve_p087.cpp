@@ -5,7 +5,6 @@
 #include "solve_p087.h"
 #include <iostream>
 #include "generators/prime_generator.h"
-#include <set>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

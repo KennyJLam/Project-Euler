@@ -93,5 +93,6 @@
 #include "solve_p086.h"
 #include "solve_p087.h"
 #include "solve_p088.h"
+#include "solve_p089.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

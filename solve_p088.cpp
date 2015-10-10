@@ -6,6 +6,8 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <numeric>
+#include <algorithm>
 #include "math_utils.h"
 
 typedef unsigned long long ull;
@@ -19,52 +21,45 @@ void euler::SolveP088()
 {
     const uint max = 12000;
 
-    set<uint> matches { 4 };
+    vector<uint> matches(max - 1, 2 * max);
 
     vector<uint> digits;
-    for (uint k = 3; k <= max; ++k)
+    uint match_max = 2 * max;
+    for (uint num_factors = 2; pow_int(2, num_factors) <= match_max; ++num_factors)
     {
-        digits.clear();
-        uint min = 2 * k;
-
-        for (uint num_factors = 1; pow_int(2, num_factors) < k; ++num_factors)
+        digits.assign(num_factors, 2);
+        digits[0] = 1;
+        for (;;)
         {
-            for (uint i : digits)
+            uint product = 1;
+            uint offset = 0;
+            bool end_set = false;
+            do
             {
-                digits[i] = 2;
+                if (offset >= num_factors)
+                {
+                    end_set = true;
+                    break;
+                }
+                fill (digits.begin(), digits.begin() + offset + 1, digits[offset] + 1);
+                product = accumulate(digits.begin(), digits.end(), 1ul, multiplies<uint>());
             }
-            digits.push_back(2);
-
-            for (;;)
-            {
-                uint product = 1;
-                for (uint digit : digits)
-                {
-                    product *= digit;
-                }
-                if (product >= k)
-                {
-
-                    continue;
-                }
-                uint sum = 0;
-                for (uint digit : digits)
-                {
-                    sum += digit;
-                }
-                ++digits.front();
+            while (++offset, product > match_max);
+            if (end_set)
                 break;
-            }
+            uint sum = accumulate(digits.begin(), digits.end(), 0ul);
+            uint num_factors_with_ones = num_factors + product - sum;
+            if (num_factors_with_ones <= max)
+                matches[num_factors_with_ones - 2] = min(matches[num_factors_with_ones - 2], product);
         }
-
-
     }
 
-    ull sum = 0;
+    set<uint> match_set;
     for (uint match : matches)
     {
-        sum += match;
+        match_set.insert(match);
     }
-    ull solution = sum;
+
+    ull solution = accumulate(match_set.begin(), match_set.end(), 0ul);
     cout << "P088 solution: " << solution << endl;
 }

@@ -19,6 +19,16 @@ namespace euler
     }
 
     template<typename T>
+    T sqrt_perfect(T value)
+    {
+        T root = (T)std::sqrt(value);
+        if (root * root == value)
+            return root;
+        else
+            return root + 1;
+    }
+
+    template<typename T>
     T pow_int(T base, int exp)
     {
         if (exp == 0)

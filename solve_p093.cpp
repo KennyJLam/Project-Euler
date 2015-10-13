@@ -5,10 +5,8 @@
 #include "solve_p093.h"
 #include <iostream>
 #include <algorithm>
-#include <vector>
 #include <set>
 #include <stack>
-#include <utility>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

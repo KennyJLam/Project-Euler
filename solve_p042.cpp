@@ -17,7 +17,7 @@ void euler::SolveP042()
     ifstream input("C:/Dev/Project-Euler/inputs/p042_words.txt");
     string value;
     vector<string> words;
-    uint max_len = 0;
+    ull max_len = 0;
     while (input.good())
     {
         getline(input, value, ',');

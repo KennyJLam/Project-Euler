@@ -29,10 +29,13 @@ namespace euler
         void Add(const BigInt<T>& value);
         void operator+=(T value);
         void operator+=(const BigInt<T>& value);
+        BigInt<T>& operator++();
         BigInt<T> operator+(const BigInt<T>& value) const;
 
+        void Subtract(T value);
         void Subtract(const BigInt<T>& value);
         void operator-=(const BigInt<T>& value);
+        BigInt<T>& operator--();
         BigInt<T> operator-(const BigInt<T>& value) const;
 
         void Multiply(T value);
@@ -40,6 +43,8 @@ namespace euler
         void operator*=(T value);
         void operator*=(const BigInt<T>& value);
         BigInt<T> operator*(const BigInt<T>& value);
+
+        void TruncateDigits(unsigned long long num_digits);
 
         bool operator>(const BigInt<T>&  value) const;
         bool operator<(const BigInt<T>&  value) const;
@@ -63,6 +68,8 @@ namespace euler
         void ripple_carry();
         bool is_negative_;
     };
+
+    /*** Constructors ***/
 
     template<typename T>
     BigInt<T>::BigInt() : digits_(1, 0), is_negative_(false), max_num_digits_(0) { }
@@ -91,9 +98,12 @@ namespace euler
     template<typename T>
     BigInt<T>::BigInt(BigInt<T>&& big_int) : digits_(std::move(big_int.digits_)), is_negative_(big_int.is_negative_) { }
 
+    /*** Equality operators ***/
+
     template<typename T>
     void BigInt<T>::operator=(unsigned long long value)
     {
+        digits_.clear();
         is_negative_ = false;
         if (value == 0)
             digits_.push_back(0);
@@ -121,121 +131,7 @@ namespace euler
         is_negative_ = value.is_negative_;
     }
 
-    template<typename T>
-    void BigInt<T>::operator+=(T value)
-    {
-        Add(value);
-    }
-
-    template<typename T>
-    void BigInt<T>::operator+=(const BigInt<T>& value)
-    {
-        Add(value);
-    }
-
-    template<typename T>
-    void BigInt<T>::operator-=(const BigInt<T>& value)
-    {
-        Subtract(value);
-    }
-
-    template<typename T>
-    BigInt<T> BigInt<T>::operator-(const BigInt<T>& value) const
-    {
-        BigInt<T> temp(*this);
-        temp.Subtract(value);
-        return temp;
-    }
-
-    template<typename T>
-    BigInt<T> BigInt<T>::operator+(const BigInt<T>& value) const
-    {
-        BigInt<T> temp(*this);
-        temp.Add(value);
-        return temp;
-    }
-
-    template<typename T>
-    void BigInt<T>::operator*=(T value)
-    {
-        Multiply(value);
-    }
-
-    template<typename T>
-    void BigInt<T>::operator*=(const BigInt<T>& value)
-    {
-        Multiply(value);
-    }
-
-    template<typename T>
-    BigInt<T> BigInt<T>::operator*(const BigInt<T>& value)
-    {
-        BigInt<T> temp(*this);
-        temp.Multiply(value);
-        return temp;
-    }
-
-    template<typename T>
-    unsigned int BigInt<T>::ToUint() const
-    {
-        unsigned int value = 0;
-        unsigned int exp = 1;
-
-        for (T digit : digits_)
-        {
-            value += exp * digit;
-            exp *= 10;
-        }
-
-        return value;
-    }
-
-    template<typename T>
-    unsigned long long int BigInt<T>::ToUll() const
-    {
-        unsigned long long value = 0;
-        unsigned long long exp = 1;
-
-        for (T digit : digits_)
-        {
-            value += exp * digit;
-            exp *= 10;
-        }
-
-        return value;
-    }
-
-    template<typename T>
-    std::string BigInt<T>::ToString() const
-    {
-        std::string value;
-        if (is_negative_)
-            value.push_back('-');
-        for (auto iter = digits_.rbegin(); iter != digits_.rend(); ++iter)
-        {
-            value.push_back((char)(*iter + '0'));
-        }
-
-        return value;
-    }
-
-    template<typename T>
-    const std::vector<T>& BigInt<T>::digits() const { return digits_; }
-
-    template<typename T>
-    unsigned long long BigInt<T>::max_num_digits() const { return max_num_digits_; }
-
-    template<typename T>
-    void BigInt<T>::set_max_num_digits(unsigned long long max_num_digits) { max_num_digits_ = max_num_digits; }
-
-    template<typename T>
-    const typename std::vector<T>::size_type BigInt<T>::NumDigits() const
-    {
-        return digits().size();
-    }
-
-    template<typename T>
-    BigInt<T>::~BigInt() { }
+    /*** Addition ***/
 
     template<typename T>
     void BigInt<T>::Add(T value)
@@ -259,6 +155,35 @@ namespace euler
         ripple_carry();
     }
 
+    template<typename T>
+    void BigInt<T>::operator+=(T value)
+    {
+        Add(value);
+    }
+
+    template<typename T>
+    void BigInt<T>::operator+=(const BigInt<T>& value)
+    {
+        Add(value);
+    }
+
+    template<typename T>
+    BigInt<T>& BigInt<T>::operator++()
+    {
+        Add(1);
+        return *this;
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator+(const BigInt<T>& value) const
+    {
+        BigInt<T> temp(*this);
+        temp.Add(value);
+        return temp;
+    }
+
+    /*** Subtraction ***/
+
     // TODO: Right now we assume a positive difference
     template<typename T>
     void BigInt<T>::Subtract(const BigInt<T>& value)
@@ -271,6 +196,37 @@ namespace euler
 
         ripple_carry();
     }
+
+    template<typename T>
+    void BigInt<T>::Subtract(T value)
+    {
+        digits_[0] -= value;
+        ripple_carry();
+    }
+
+    template<typename T>
+    void BigInt<T>::operator-=(const BigInt<T>& value)
+    {
+        Subtract(value);
+    }
+
+    template<typename T>
+    BigInt<T>& BigInt<T>::operator--()
+    {
+        digits_[0] -= 1;
+        ripple_carry();
+        return *this;
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator-(const BigInt<T>& value) const
+    {
+        BigInt<T> temp(*this);
+        temp.Subtract(value);
+        return temp;
+    }
+
+    /*** Multiplication ***/
 
     template<typename T>
     void BigInt<T>::Multiply(T value)
@@ -309,6 +265,45 @@ namespace euler
         temp.ripple_carry();
         digits_ = temp.digits_;
     }
+
+    template<typename T>
+    void BigInt<T>::operator*=(T value)
+    {
+        Multiply(value);
+    }
+
+    template<typename T>
+    void BigInt<T>::operator*=(const BigInt<T>& value)
+    {
+        Multiply(value);
+    }
+
+    template<typename T>
+    BigInt<T> BigInt<T>::operator*(const BigInt<T>& value)
+    {
+        BigInt<T> temp(*this);
+        temp.Multiply(value);
+        return temp;
+    }
+
+    /*** Division ***/
+
+    // Equivalent to dividing by a power of 10
+    template<typename T>
+    void BigInt<T>::TruncateDigits(unsigned long long num_digits)
+    {
+        for (unsigned long long i = num_digits; i < digits_.size(); ++i)
+        {
+            digits_[i - num_digits] = digits_[i];
+        }
+
+        for (unsigned long long i = 0; i < num_digits; ++i)
+        {
+            digits_.pop_back();
+        }
+    }
+
+    /*** Comparative Operators ***/
 
     template<typename T>
     bool BigInt<T>::operator==(const BigInt<T>& value) const
@@ -368,6 +363,74 @@ namespace euler
     {
         return !operator>(value);
     }
+
+    /*** Conversion ***/
+
+    template<typename T>
+    unsigned int BigInt<T>::ToUint() const
+    {
+        unsigned int value = 0;
+        unsigned int exp = 1;
+
+        for (T digit : digits_)
+        {
+            value += exp * digit;
+            exp *= 10;
+        }
+
+        return value;
+    }
+
+    template<typename T>
+    unsigned long long int BigInt<T>::ToUll() const
+    {
+        unsigned long long value = 0;
+        unsigned long long exp = 1;
+
+        for (T digit : digits_)
+        {
+            value += exp * digit;
+            exp *= 10;
+        }
+
+        return value;
+    }
+
+    template<typename T>
+    std::string BigInt<T>::ToString() const
+    {
+        std::string value;
+        if (is_negative_)
+            value.push_back('-');
+        for (auto iter = digits_.rbegin(); iter != digits_.rend(); ++iter)
+        {
+            value.push_back((char)(*iter + '0'));
+        }
+
+        return value;
+    }
+
+    /*** Properties ***/
+
+    template<typename T>
+    const std::vector<T>& BigInt<T>::digits() const { return digits_; }
+
+    template<typename T>
+    unsigned long long BigInt<T>::max_num_digits() const { return max_num_digits_; }
+
+    template<typename T>
+    void BigInt<T>::set_max_num_digits(unsigned long long max_num_digits) { max_num_digits_ = max_num_digits; }
+
+    template<typename T>
+    const typename std::vector<T>::size_type BigInt<T>::NumDigits() const
+    {
+        return digits().size();
+    }
+
+    template<typename T>
+    BigInt<T>::~BigInt() { }
+
+    /*** Internal implementation ***/
 
     template<typename T>
     void BigInt<T>::ripple_carry()

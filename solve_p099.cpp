@@ -8,7 +8,6 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-#include <cmath>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

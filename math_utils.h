@@ -28,8 +28,8 @@ namespace euler
             return root + 1;
     }
 
-    template<typename T>
-    T pow_int(T base, int exp)
+    template<typename T, typename U>
+    T pow_int(T base, U exp)
     {
         if (exp == 0)
             return 1;

@@ -6,7 +6,6 @@
 #include <iostream>
 #include <algorithm>
 #include "math_utils.h"
-#include "big_int.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

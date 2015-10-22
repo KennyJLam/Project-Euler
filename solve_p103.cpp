@@ -6,7 +6,6 @@
 #include <iostream>
 #include <algorithm>
 #include <set>
-#include <vector>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

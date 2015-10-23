@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <set>
+#include <map>
 
 namespace euler
 {
@@ -20,6 +21,7 @@ namespace euler
         T NextPrime(T floor);
         bool IsPrime(T value);
         std::set<T>& PrimeFactors(T value, std::set<T>& prime_factors);
+        std::map<T,T> PrimeFactorFreq(T value);
         const std::set<T>& primes() const;
         T current_prime() const;
         ~PrimeGenerator();
@@ -134,6 +136,52 @@ namespace euler
 
         return prime_factors;
     }
+
+    template<typename T>
+    std::map<T,T> PrimeGenerator<T>::PrimeFactorFreq(T value)
+    {
+        std::map<T,T> freq;
+        if (primes_.find(value) != primes_.end())
+        {
+            freq[value] = 1;
+            return freq;
+        }
+
+        T floor = std::floor(std::sqrt(value));
+        if (floor >= max_prime_)
+            generate_new_primes(floor);
+        freq.clear();
+
+        bool remainder_is_prime = false;
+        while (value != 1)
+        {
+            for (T prime : primes_)
+            {
+                if (value % prime == 0)
+                {
+                    if (freq.find(prime) == freq.end())
+                        freq[prime] = 0;
+                    ++freq[prime];
+                    value /= prime;
+                    floor = std::floor(std::sqrt(value));
+                    break;
+                }
+
+                if (prime > floor)
+                {
+                    remainder_is_prime = true;
+                    if (freq.find(prime) == freq.end())
+                        freq[prime] = 0;
+                    ++freq[prime];
+                    break;
+                }
+            }
+            if (remainder_is_prime)
+                break;
+        }
+
+        return freq;
+    };
 
     template<typename T>
     void PrimeGenerator<T>::generate_new_primes(T floor)

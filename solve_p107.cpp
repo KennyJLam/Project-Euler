@@ -61,7 +61,6 @@ void euler::SolveP107()
     {
         forest.push_back(set<ull> { k });
     }
-
     while (forest.size() > 1)
     {
         ull vertex_a = edges.top().first.first;

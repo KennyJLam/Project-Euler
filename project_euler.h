@@ -111,5 +111,6 @@
 #include "solve_p104.h"
 #include "solve_p105.h"
 #include "solve_p106.h"
+#include "solve_p107.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

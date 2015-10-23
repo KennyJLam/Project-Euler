@@ -82,23 +82,16 @@ bool euler::check_sums(const vector<ull>& target_set)
             sums.insert(sum);
 
 
+            bool end = true;
             for (ll j = iters.size() - 1; j >= 0; --j)
             {
-                if (iters[j] != target_set.end() - (iters.size() - j - 1))
+                if (iters[j] != target_set.end() - (iters.size() - j))
                 {
                     ++iters[j];
                     for (ll k = j + 1; k < iters.size(); ++k)
                     {
                         iters[k] = iters[k - 1] + 1;
                     }
-                    break;
-                }
-            }
-            bool end = true;
-            for (ll j = 0; j < iters.size(); ++j)
-            {
-                if (iters[j] != target_set.end() - (iters.size() - j - 1))
-                {
                     end = false;
                     break;
                 }

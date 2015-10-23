@@ -17,10 +17,10 @@ using namespace std;
 
 namespace euler
 {
-    bool check_sums_105(const vector<ull>& target_set);
+    static bool check_sums(const vector<ull>& target_set);
 }
 
-bool euler::check_sums_105(const vector<ull>& target_set)
+static bool euler::check_sums(const vector<ull>& target_set)
 {
     const ull max_n = target_set.size() / 2;
     set<ull> sums;
@@ -105,7 +105,7 @@ void euler::SolveP105()
         if (!valid)
             continue;
 
-        if (check_sums_105(target_set))
+        if (check_sums(target_set))
             sum += accumulate(target_set.begin(), target_set.end(), 0ull);
     }
 

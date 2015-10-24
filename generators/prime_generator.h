@@ -170,9 +170,9 @@ namespace euler
                 if (prime > floor)
                 {
                     remainder_is_prime = true;
-                    if (freq.find(prime) == freq.end())
-                        freq[prime] = 0;
-                    ++freq[prime];
+                    if (freq.find(value) == freq.end())
+                        freq[value] = 0;
+                    ++freq[value];
                     break;
                 }
             }

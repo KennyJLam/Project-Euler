@@ -15,28 +15,15 @@ typedef long long ll;
 
 using namespace std;
 
+// Had to impose arbitrary limit to get anywhere near the time limit.  Think I can make this better
+// using a recursive approach where we dynamically calculate the individual exponent ceiling for each prime factor
 void euler::SolveP110()
 {
     const ull target = 4000000;
     ull n;
     PrimeGenerator<ull> gen;
-//    for (n = 2;;++n)
-//    {
-//        map<ull,ull> prime_factors = gen.PrimeFactorFreq(n);
-//        ull num_factors = 1;
-//        for (const auto& p : prime_factors)
-//        {
-//            num_factors *= (2 * p.second) + 1;
-//        }
-//        ull num_solutions = (num_factors + 1) / 2;
-//
-//        if (num_solutions > target)
-//            break;
-//    }
-//    ull best_val = n;
 
     vector<ull> primes;
-    ull ceiling = 1;
     ull log_ceiling = 0;
     double log_temp = 2 * log(target);
     while (log_temp > 3)
@@ -47,12 +34,12 @@ void euler::SolveP110()
     }
 
     vector<ull> exp_limits;
-    //double log_ceiling = log(ceiling);
     for (ull i = 0; i < primes.size(); ++i)
     {
         exp_limits.push_back((ull)(log_ceiling / accumulate(primes.begin(), primes.begin() + i + 1, 0.0, [](double sum, ull val)
         { return sum + log(val); })));
     }
+    transform(exp_limits.begin(), exp_limits.end(), exp_limits.begin(), [] (ull val) { return min(val, 10ull); });
 
     ull best_val = numeric_limits<ull>::max();
     vector<ull> prime_freqs(primes.size(), 0);
@@ -64,23 +51,8 @@ void euler::SolveP110()
         {
             if (prime_freqs[i] < exp_limits[i] && (i == 0 || prime_freqs[i] < prime_freqs[i - 1]))
             {
-//                ull num_divisors = accumulate(prime_freqs.begin(), prime_freqs.end(), 1ull,
-//                    [&] (ull product, ull freq) { return product * (2 * freq + 1); });
-                if (ct % 1000000 == 0)
-                {
-                    for (ull freq : prime_freqs)
-                    {
-                        cout << freq << " ";
-                    }
-                    cout << endl;
-                    ct = 0;
-                }
-                ++ct;
-                ull num_divisors = 1;
-                for (ull j = 0; j < prime_freqs.size(); ++j)
-                {
-                    num_divisors *= (2 * prime_freqs[j] + 1);
-                }
+                ull num_divisors = accumulate(prime_freqs.begin(), prime_freqs.end(), 1ull,
+                    [&] (ull product, ull freq) { return product * (2 * freq + 1); });
                 if (num_divisors > 2 * target - 1)
                 {
                     ull candidate = 1;
@@ -99,7 +71,7 @@ void euler::SolveP110()
                 break;
             }
         }
-        if (exit_loop || prime_freqs[0] > 30)
+        if (exit_loop)
             break;
     }
 

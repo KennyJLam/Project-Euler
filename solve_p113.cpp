@@ -5,7 +5,6 @@
 #include "solve_p113.h"
 #include <iostream>
 #include <algorithm>
-#include "big_int.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

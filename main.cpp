@@ -1,7 +1,6 @@
 #include <iostream>
 #include "project_euler.h"
 #include <chrono>
-#include "big_int.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -9,7 +8,7 @@ using namespace std::chrono;
 int main()
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    euler::SolveP117();
+    euler::SolveP118();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
     long long int duration = duration_cast<milliseconds>(t2 - t1).count();

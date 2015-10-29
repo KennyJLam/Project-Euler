@@ -4,7 +4,6 @@
 
 #include "solve_p121.h"
 #include <iostream>
-#include <algorithm>
 
 typedef unsigned long long ull;
 typedef unsigned int uint;

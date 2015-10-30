@@ -128,5 +128,6 @@
 #include "solve_p121.h"
 #include "solve_p122.h"
 #include "solve_p123.h"
+#include "solve_p124.h"
 
 #endif //PROJECT_EULER_PROJECT_EULER_H

@@ -6,7 +6,6 @@
 #include <iostream>
 #include <algorithm>
 #include "generators/palindrone_generator.h"
-#include "math_utils.h"
 
 typedef unsigned long long ull;
 typedef unsigned int uint;
@@ -16,10 +15,10 @@ using namespace std;
 
 namespace euler
 {
-    static bool is_consecutive_square_sum(ull value);
+    static bool num_cubes(ull value);
 }
 
-bool euler::is_consecutive_square_sum(ull value)
+bool euler::num_cubes(ull value)
 {
     if (is_perfect_square(value))
         return false;
@@ -58,7 +57,7 @@ void euler::SolveP125()
         ull palindrome = gen.GetNext();
         if (palindrome >= ceiling)
             break;
-        if (is_consecutive_square_sum(palindrome))
+        if (num_cubes(palindrome))
             total_sum += palindrome;
 
     }

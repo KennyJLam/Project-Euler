@@ -15,11 +15,18 @@ using namespace std;
 namespace euler
 {
     static ull get_num_cubes(ull a, ull b, ull c, ull layer);
+    static bool has_solution(ull a, ull b, ull layer, ull num_cubes);
 }
 
 ull euler::get_num_cubes(ull a, ull b, ull c, ull layer)
 {
     return 2 * (a*b + b*c + a*c) + 4 * max(0ull, layer - 1) * (a + b + c) + 8 * max(0ull, layer - 2) * (layer - 1) / 2;
+}
+
+bool euler::has_solution(ull a, ull b, ull layer, ull num_cubes)
+{
+    return ((num_cubes - 2 * (a*b) - 4 * max(0ull, layer - 1) * (a + b) - 8 * max(0ull, layer - 2) * (layer - 1) / 2)
+           % (2 * (a + b) + 4 * max(0ull, layer - 1))) == 0;
 }
 
 void euler::SolveP126()
@@ -41,19 +48,11 @@ void euler::SolveP126()
             {
                 for (b = a;get_num_cubes(a, b, b, layer) <= n;++b)
                 {
-                    for(c = b;;++c)
-                    {
-                        ull num_cubes = get_num_cubes(a, b, c, layer);
-                        if (num_cubes == n)
-                            ++count;
-                        if (num_cubes >= n)
-                            break;
-                    }
+                    if (has_solution(a, b, layer, n))
+                        ++count;
                 }
             }
         }
-        if (n % 100 == 0)
-            cout << n << " " << count << endl;
         if (count == target)
             break;
     }
